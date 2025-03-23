@@ -12,7 +12,7 @@ A Chrome Extension that uses OpenAI's GPT to provide concise summaries and solut
 - 🔄 Loading animations and smooth transitions
 
 ## Demo
-[Add a GIF or screenshot of your extension in action]
+![LeetCode AI Summarizer Demo](Demo.gif)
 
 ## Installation
 
