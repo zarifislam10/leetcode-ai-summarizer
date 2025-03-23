@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "LeetCode AI Summarizer",
+  "version": "1.0",
+  "description": "Summarizes LeetCode problems using GPT-4",
+  "permissions": ["activeTab"],
+  "host_permissions": ["https://leetcode.com/*", "https://api.openai.com/*"],
+  "content_scripts": [{
+    "matches": ["https://leetcode.com/problems/*"],
+    "js": ["content.js"],
+    "css": ["styles.css"]
+  }]
+}
