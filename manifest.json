@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "LeetCode AI Summarizer",
+  "version": "2.0",
+  "description": "Summarizes LeetCode problems, suggests data structures, and recommends easier practice problems.",
+  "permissions": ["activeTab", "clipboardWrite", "storage"],
+  "host_permissions": [
+    "https://leetcode.com/*",
+    "http://localhost:5000/*"
+  ],
+  "content_scripts": [{
+    "matches": ["https://leetcode.com/problems/*"],
+    "js": ["content.js"],
+    "css": ["styles.css"]
+  }]
+}
