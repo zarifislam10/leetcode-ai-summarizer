@@ -4,6 +4,11 @@ const BACKEND_URL = 'http://127.0.0.1:5000/summarize';
 // ─── Icons ───────────────────────────────────────────────────────────────────
 const sunIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun-icon lucide-sun"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>'
 const moonIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon-icon lucide-moon"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></svg>'
+const settingsIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings-icon lucide-settings"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/></svg>'
+const trashIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash2-icon lucide-trash-2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>'
+const puzzleIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-puzzle-icon lucide-puzzle"><path d="M15.39 4.39a1 1 0 0 0 1.68-.474 2.5 2.5 0 1 1 3.014 3.015 1 1 0 0 0-.474 1.68l1.683 1.682a2.414 2.414 0 0 1 0 3.414L19.61 15.39a1 1 0 0 1-1.68-.474 2.5 2.5 0 1 0-3.014 3.015 1 1 0 0 1 .474 1.68l-1.683 1.682a2.414 2.414 0 0 1-3.414 0L8.61 19.61a1 1 0 0 0-1.68.474 2.5 2.5 0 1 1-3.014-3.015 1 1 0 0 0 .474-1.68l-1.683-1.682a2.414 2.414 0 0 1 0-3.414L4.39 8.61a1 1 0 0 1 1.68.474 2.5 2.5 0 1 0 3.014-3.015 1 1 0 0 1-.474-1.68l1.683-1.682a2.414 2.414 0 0 1 3.414 0z"/></svg>'
+const clipboardIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clipboard-type-icon lucide-clipboard-type"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12v-1h6v1"/><path d="M11 17h2"/><path d="M12 11v6"/></svg>'
+const dumbbellIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.4 14.4 9.6 9.6"/><path d="M18.657 21.485a2 2 0 1 1-2.829-2.828l-1.767 1.768a2 2 0 1 1-2.829-2.829l6.364-6.364a2 2 0 1 1 2.829 2.829l-1.768 1.767a2 2 0 1 1 2.828 2.829z"/><path d="m21.5 21.5-1.4-1.4"/><path d="M3.9 3.9 2.5 2.5"/><path d="M6.404 12.768a2 2 0 1 1-2.829-2.829l1.768-1.767a2 2 0 1 1-2.828-2.829l2.828-2.828a2 2 0 1 1 2.829 2.828l1.767-1.768a2 2 0 1 1 2.829 2.829z"/></svg>`
 
 // ─── Check cache first, fetch from backend if not cached ─────────────────
 function getProblemId() {
@@ -31,9 +36,22 @@ function createSummaryPopup() {
       <div class="lc-popup-header">
         <span class="lc-popup-logo">★ AI Summarizer</span>
         <div style="display:flex;gap:6px;align-items:center">
+          <button class="lc-settings-btn" id="lc-settings-btn" title="Settings">${settingsIcon}</button>
           <button class="lc-theme-toggle" id="lc-theme-toggle">${sunIcon}</button>
           <button class="lc-close">✕</button>
         </div>
+      </div>
+      
+      <div id="lc-settings">
+          <button class="lc-settings-full-btn" id="lc-clear-cache">
+          ${trashIcon} Clear Cache
+          </button>
+          <button class="lc-settings-full-btn" id="lc-toggle-ds-btn">
+            Hide Data Structure
+          </button>
+          <button class="lc-settings-full-btn" id="lc-toggle-practice-btn">
+            Hide Practice First
+          </button>
       </div>
 
       <div id="lc-loading" style="display:none">
@@ -45,7 +63,7 @@ function createSummaryPopup() {
 
         <div class="lc-card" id="lc-card-summary">
           <div class="lc-card-label">
-            <span class="lc-card-icon">📋</span> Summary
+            <span class="lc-card-icon">${clipboardIcon}</span> Summary
           </div>
           <div id="lc-summary-text" class="lc-card-body"></div>
           <button class="lc-copy-btn" data-target="lc-summary-text">Copy</button>
@@ -53,7 +71,7 @@ function createSummaryPopup() {
 
         <div class="lc-card" id="lc-card-ds">
           <div class="lc-card-label">
-            <span class="lc-card-icon">🧩</span> Data Structure / Algorithm
+            <span class="lc-card-icon">${puzzleIcon}</span> Data Structure / Algorithm
           </div>
           <div id="lc-ds-badge"></div>
           <div id="lc-ds-reason" class="lc-card-body lc-muted"></div>
@@ -61,12 +79,11 @@ function createSummaryPopup() {
 
         <div class="lc-card" id="lc-card-practice">
           <div class="lc-card-label">
-            <span class="lc-card-icon">🎯</span> Practice First
+            <span class="lc-card-icon">${dumbbellIcon}</span> Practice First
           </div>
           <a id="lc-practice-link" href="#" target="_blank" class="lc-practice-title"></a>
           <div id="lc-practice-reason" class="lc-card-body lc-muted"></div>
         </div>
-
       </div>
 
       <div id="lc-error" style="display:none" class="lc-error-box"></div>
@@ -83,6 +100,42 @@ function createSummaryPopup() {
     isLight = !isLight;
     popup.classList.toggle('lc-light', isLight);
     popup.querySelector('#lc-theme-toggle').innerHTML = isLight ? moonIcon : sunIcon;
+  });
+
+  let settingsOpen = false;
+  popup.querySelector('#lc-settings-btn').addEventListener('click', () => {
+    settingsOpen = !settingsOpen;
+    popup.querySelector('#lc-settings').classList.toggle('lc-settings-open', settingsOpen);
+  });
+
+  // Clear cache
+  popup.querySelector('#lc-clear-cache').addEventListener('click', async () => {
+    await chrome.storage.local.clear();
+    const btn = popup.querySelector('#lc-clear-cache');
+    btn.textContent = '✓ Cache Cleared';
+    btn.style.color = '#4ade80';
+    btn.style.borderColor = 'rgba(74, 222, 128, 0.3)';
+    setTimeout(() => {
+      btn.innerHTML = `${trashIcon} Clear Cache`;
+      btn.style.color = '';
+      btn.style.borderColor = '';
+    }, 2000);
+  });
+  
+  // Toggle data structure
+  let dsVisible = true;
+  popup.querySelector('#lc-toggle-ds-btn').addEventListener('click', () => {
+    dsVisible = !dsVisible;
+    document.getElementById('lc-card-ds').style.display = dsVisible ? '' : 'none';
+    popup.querySelector('#lc-toggle-ds-btn').textContent = dsVisible ? 'Hide Data Structure' : 'Show Data Structure';
+  });
+
+  // Toggle practice first
+  let practiceVisible = true;
+  popup.querySelector('#lc-toggle-practice-btn').addEventListener('click', () => {
+    practiceVisible = !practiceVisible;
+    document.getElementById('lc-card-practice').style.display = practiceVisible ? '' : 'none';
+    popup.querySelector('#lc-toggle-practice-btn').textContent = practiceVisible ? 'Hide Practice First' : 'Show Practice First';
   });
 
   popup.querySelectorAll('.lc-copy-btn').forEach(btn => {
@@ -121,9 +174,11 @@ async function fetchSummary(problemText) {
   const response = await fetch(BACKEND_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ problem_text: problemText })
+    body: JSON.stringify({ 
+      problem_text: problemText,
+      problem_slug: getProblemId()
+    })
   });
-
   if (!response.ok) {
     const err = await response.json();
     throw new Error(err.error || 'Server error');
@@ -192,19 +247,23 @@ async function handleSummarizeClick() {
     const problemId = getProblemId();
     const cacheKey = `lc_cache_${problemId}`;
 
-    // Check cache first
+    // Check cache first, expires after 7 days
     const cached = await chrome.storage.local.get(cacheKey);
     if (cached[cacheKey]) {
-      showResults(cached[cacheKey]);
-      return;
+      const { data, timestamp } = cached[cacheKey];
+      const sevenDays = 7 * 24 * 60 * 60 * 1000;
+      if (Date.now() - timestamp < sevenDays) {
+        showResults(data);
+        return;
+      }
     }
     
-    // Not cahched - fetch from backend
+    // Not cached or expired - fetch from backend
     const data = await fetchSummary(problemText);
 
-    // Save to cache
+    // Save to cache with timestamp
     if (problemId) {
-      await chrome.storage.local.set({ [cacheKey]: data });
+      await chrome.storage.local.set({ [cacheKey]: { data, timestamp: Date.now() } });
     }
 
     // Show results

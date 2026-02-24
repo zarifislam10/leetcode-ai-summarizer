@@ -19,12 +19,14 @@ USER_PROMPT_TEMPLATE = """Analyze this LeetCode problem and respond with ONLY a 
   "data_structure": "The primary data structure or algorithm to use (e.g. Hash Map, Two Pointers, BFS, Dynamic Programming)",
   "data_structure_reason": "One sentence explaining why this approach works",
   "practice_first": {{
-    "title": "Name of an EASIER related LeetCode problem to practice first (must be a DIFFERENT problem, not the current one)",
+    "title": "Name of an easier foundational LeetCode problem",
     "slug": "slug-of-the-easier-problem",
     "number": 123,
     "reason": "One sentence on why this easier problem helps build the foundation"
   }}
 }}
+
+IMPORTANT: The practice_first problem must be completely different from the current problem "{problem_slug}". Do NOT suggest the same problem. Suggest a genuinely easier and different foundational problem.
 
 Problem:
 {problem_text}"""
@@ -55,6 +57,7 @@ def summarize():
         return jsonify({"error": "Missing problem_text in request body"}), 400
 
     problem_text = data["problem_text"][:3000]  # Limit to avoid token overflow
+    problem_slug = data.get("problem_slug", "")
 
     if not OPENAI_API_KEY:
         return jsonify({"error": "OpenAI API key not configured on server"}), 500
@@ -70,9 +73,9 @@ def summarize():
                 "model": "gpt-4o-mini",
                 "messages": [
                     {"role": "system", "content": SYSTEM_PROMPT},
-                    {"role": "user", "content": USER_PROMPT_TEMPLATE.format(problem_text=problem_text)}
+                    {"role": "user", "content": USER_PROMPT_TEMPLATE.format(problem_text=problem_text, problem_slug=problem_slug)}
                 ],
-                "max_tokens": 300,
+                "max_tokens": 500,
                 "temperature": 0.5,
                 "response_format": {"type": "json_object"}
             },

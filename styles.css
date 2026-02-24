@@ -299,3 +299,70 @@
   border-color: rgba(0,0,0,0.12);
   color: #888;
 }
+
+#lc-popup.lc-light .lc-settings-full-btn {
+  color: #555;
+  border-color: rgba(0,0,0,0.08);
+}
+#lc-popup.lc-light .lc-settings-full-btn:hover {
+  color: #000;
+  border-color: rgba(0,0,0,0.15);
+  background: rgba(0,0,0,0.04);
+}
+
+/* ── Settings Button ─────────────────────────────────────────────────────── */
+.lc-settings-btn {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 5px;
+  color: #888;
+  cursor: pointer;
+  padding: 4px 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+.lc-settings-btn:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.1);
+}
+
+/* ── Settings Panel ──────────────────────────────────────────────────────── */
+#lc-settings {
+  overflow: hidden;
+  max-height: 0;
+  padding: 0 8px;
+  transition: max-height 0.3s cubic-bezier(0.22, 1, 0.36, 1), padding 0.3s ease;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+#lc-settings.lc-settings-open {
+  max-height: 200px;
+  padding: 8px;
+}
+
+.lc-settings-full-btn {
+  width: 100%;
+  background: none;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  color: #aaa;
+  font-size: 13px;
+  padding: 10px 14px;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.15s;
+}
+.lc-settings-full-btn:hover {
+  color: #fff;
+  border-color: rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.04);
+}
