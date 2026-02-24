@@ -1,0 +1,19 @@
+meta {
+  name: Verify Slug Test
+  type: http
+  seq: 2
+}
+
+get {
+  url: GET https://alfa-leetcode-api.onrender.com/select?titleSlug=two-sum
+  body: none
+  auth: inherit
+}
+
+params:query {
+  titleSlug: two-sum
+}
+
+settings {
+  encodeUrl: true
+}

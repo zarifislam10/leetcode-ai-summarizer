@@ -19,7 +19,8 @@ USER_PROMPT_TEMPLATE = """Analyze this LeetCode problem and respond with ONLY a 
   "data_structure": "The primary data structure or algorithm to use (e.g. Hash Map, Two Pointers, BFS, Dynamic Programming)",
   "data_structure_reason": "One sentence explaining why this approach works",
   "practice_first": {{
-    "title": "Name of an easier related LeetCode problem to practice first",
+    "title": "Name of an EASIER related LeetCode problem to practice first (must be a DIFFERENT problem, not the current one)",
+    "slug": "slug-of-the-easier-problem",
     "number": 123,
     "reason": "One sentence on why this easier problem helps build the foundation"
   }}
@@ -27,6 +28,21 @@ USER_PROMPT_TEMPLATE = """Analyze this LeetCode problem and respond with ONLY a 
 
 Problem:
 {problem_text}"""
+
+
+def verify_slug(slug):
+    try:
+        response = requests.get(
+            f"https://alfa-leetcode-api.onrender.com/select?titleSlug={slug}",
+            timeout=5
+        )
+        data = response.json()
+        if data.get("titleSlug"):
+            return data["titleSlug"]
+    except:
+        pass
+    return slug # Fall back to GPT's slug
+
 
 @app.route("/health", methods=["GET"])
 def health():
@@ -72,6 +88,11 @@ def summarize():
 
         import json
         parsed = json.loads(content)
+
+        # Validate and correct practice problem slug before returning to client
+        if parsed.get("practice_first") and parsed["practice_first"].get("slug"):
+            parsed["practice_first"]["slug"] = verify_slug(parsed["practice_first"]["slug"])
+
         return jsonify(parsed)
 
     except requests.exceptions.Timeout:

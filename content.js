@@ -149,7 +149,7 @@ function showResults(data) {
   if (practice) {
     const link = document.getElementById('lc-practice-link');
     link.textContent = `#${practice.number} – ${practice.title}`;
-    link.href = `https://leetcode.com/problems/${practice.title.toLowerCase().replace(/\s+/g, '-')}/`;
+    link.href = `https://leetcode.com/problems/${practice.slug}/`;
     document.getElementById('lc-practice-reason').textContent = practice.reason || '';
   } else {
     document.getElementById('lc-card-practice').style.display = 'none';
@@ -218,8 +218,16 @@ async function handleSummarizeClick() {
 function init() {
   createSummarizeButton();
   createSummaryPopup();
-}
 
+  // Auto-close popup on navigation
+  let lastUrl = location.href;
+  new MutationObserver(() => {
+    if (location.href !== lastUrl) {
+      lastUrl = location.href;
+      document.getElementById('lc-popup').style.display = 'none';
+    }
+  }).observe(document, { subtree: true, childList: true});
+}
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);
 } else {
