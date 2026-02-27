@@ -7,7 +7,7 @@ name: Build and deploy Python app to Azure Web App - leetstar
 on:
   push:
     branches:
-      - v2-flask-backend
+      - main
   workflow_dispatch:
 
 jobs:
@@ -73,4 +73,5 @@ jobs:
         with:
           app-name: 'leetstar'
           slot-name: 'Production'
+
           
