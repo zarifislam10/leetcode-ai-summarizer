@@ -6,7 +6,8 @@
   "permissions": ["activeTab", "clipboardWrite", "storage"],
   "host_permissions": [
     "https://leetcode.com/*",
-    "http://localhost:5000/*"
+    "http://localhost:5000/*",
+    "https://leetstar-hgdxhjf9cvd9dze7.eastus2-01.azurewebsites.net/*"
   ],
   "content_scripts": [{
     "matches": ["https://leetcode.com/problems/*"],
