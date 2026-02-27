@@ -34,7 +34,7 @@ function createSummaryPopup() {
   popup.innerHTML = `
     <div class="lc-popup-inner">
       <div class="lc-popup-header">
-        <span class="lc-popup-logo">★ AI Summarizer</span>
+        <span class="lc-popup-logo">★ LeetStar</span>
         <div style="display:flex;gap:6px;align-items:center">
           <button class="lc-settings-btn" id="lc-settings-btn" title="Settings">${settingsIcon}</button>
           <button class="lc-theme-toggle" id="lc-theme-toggle">${sunIcon}</button>

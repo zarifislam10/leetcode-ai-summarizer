@@ -1,4 +1,4 @@
-# LeetCode AI Summarizer v2.0
+# LeetStar v2.0
 
 A Chrome extension that summarizes LeetCode problems using GPT, now with a secure Flask backend.
 
@@ -78,7 +78,7 @@ And update `manifest.json` host_permissions to include your deployed URL.
 ## Project Structure
 
 ```
-leetcode-summarizer/
+leetstar/
 ├── backend/
 │   ├── app.py              # Flask API
 │   └── requirements.txt
