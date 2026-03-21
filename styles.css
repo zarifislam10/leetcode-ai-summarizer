@@ -74,7 +74,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 14px 10px;
+  padding: 13px 15px 11px;
   border-bottom: 1px solid rgba(255,215,0,0.12);
 
   background: linear-gradient(
@@ -88,18 +88,24 @@
 
 .lc-popup-logo {
   font-family: 'Michroma', sans-serif;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 400;
   color: #ffd700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.11em;
+  line-height: 1.25;
   cursor: default;
   user-select: none;
+  text-shadow: 0 0 28px rgba(255, 215, 0, 0.35);
 }
 
 .logo-star {
   display: inline-block;
   color: #ffd700;
-  padding: 0 2px;
+  padding: 0 1px;
+  font-size: 1.14em;
+  line-height: 1;
+  /* Positive vertical-align raises the ★; negative was pulling it down vs cap height */
+  vertical-align: 0.1em;
   cursor: default;
   user-select: none;
   transition: transform 0.2s ease, text-shadow 0.2s ease, filter 0.2s ease;
@@ -204,13 +210,13 @@
   font-size: 11px;
   font-weight: 600; 
   text-transform: uppercase;
-  letter-spacing: 0.08em; 
-  color: #ffd700;
+  letter-spacing: 0.06em; 
+  color: #facc15;
   margin-bottom: 7px;
   display: flex;
   align-items: center;
   gap: 5px;
-  opacity: 0.85;
+  opacity: 0.9;
 }
 
 .lc-card-icon { font-size: 12px; }
@@ -298,6 +304,20 @@
   color: #b8860b;
   text-shadow: none;
 }
+
+#lc-popup.lc-light .lc-popup-logo .logo-star {
+  color: inherit;
+}
+#lc-popup.lc-light .lc-popup-logo .logo-star:hover {
+  color: #8b6914;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.12),
+    0 0 10px rgba(184, 134, 11, 0.5),
+    0 0 22px rgba(245, 158, 11, 0.45),
+    0 0 36px rgba(217, 119, 6, 0.35);
+  filter: brightness(1.05) saturate(1.2);
+}
+
 #lc-popup.lc-light .lc-close {
   color: #999;
 }
