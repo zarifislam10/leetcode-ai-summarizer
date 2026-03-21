@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Michroma&display=swap');
+
+
 /* ── Star Button ─────────────────────────────────────────────────────────── */
 #lc-star-btn {
   position: fixed;
@@ -77,10 +80,11 @@
 }
 
 .lc-popup-logo {
+  font-family: 'Michroma', sans-serif;
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 400;
   color: #ffd700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.08em;
   text-shadow: 0 0 10px rgba(255,215,0,0.4);
 }
 
@@ -145,7 +149,6 @@
 #lc-results {
   display: flex;
   flex-direction: column;
-  gap: 0;
   padding: 10px;
   gap: 8px;
 }
@@ -169,10 +172,11 @@
 }
 
 .lc-card-label {
+  font-family: 'Michroma', sans-serif;
   font-size: 10px;
-  font-weight: 700;
+  font-weight: 400;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   color: #ffd700;
   margin-bottom: 7px;
   display: flex;
