@@ -76,7 +76,14 @@
   justify-content: space-between;
   padding: 12px 14px 10px;
   border-bottom: 1px solid rgba(255,215,0,0.12);
-  background: rgba(255,215,0,0.04);
+
+  background: linear-gradient(
+    180deg,
+    rgba(255,215,0,0.08),
+    rgba(255,215,0,0.02)
+  );
+
+  box-shadow: inset 0 -1px 0 rgba(255,215,0,0.08);
 }
 
 .lc-popup-logo {
@@ -85,7 +92,23 @@
   font-weight: 400;
   color: #ffd700;
   letter-spacing: 0.08em;
-  text-shadow: 0 0 10px rgba(255,215,0,0.4);
+}
+
+.logo-star {
+  display: inline-block;
+  color: #ffd700;
+  transition: transform 0.2s ease, text-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.logo-star:hover {
+  transform: scale(1.22) rotate(8deg);
+  text-shadow:
+    0 0 10px #fff,
+    0 0 20px #fff7b3,
+    0 0 36px #ffd700,
+    0 0 56px #ffb300,
+    0 0 80px #ff8c00;
+  filter: brightness(1.35);
 }
 
 .lc-close {
