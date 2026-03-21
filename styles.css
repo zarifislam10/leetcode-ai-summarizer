@@ -92,11 +92,16 @@
   font-weight: 400;
   color: #ffd700;
   letter-spacing: 0.08em;
+  cursor: default;
+  user-select: none;
 }
 
 .logo-star {
   display: inline-block;
   color: #ffd700;
+  padding: 0 2px;
+  cursor: default;
+  user-select: none;
   transition: transform 0.2s ease, text-shadow 0.2s ease, filter 0.2s ease;
 }
 
