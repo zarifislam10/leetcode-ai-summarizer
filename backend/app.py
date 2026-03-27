@@ -70,12 +70,15 @@ def summarize():
 
     problem_text = data["problem_text"][:3000]  # Limit to avoid token overflow
     problem_slug = data.get("problem_slug", "")
+    uid = data.get("uid", "anonymous")
 
     # Check MongoDB cache first to avoid redundant API calls
     if history_collection is not None:
         existing = history_collection.find_one({"problem_slug": problem_slug})
         if existing:
-            existing.pop("_id", None) # remove MongoDB _id so it doesn’t break response
+            existing.pop("_id", None)  # removes _id (MongoDB ObjectId can't be JSON'd)
+            if "timestamp" in existing:
+                existing["timestamp"] = existing["timestamp"].isoformat()  # converts datetime to string
             return jsonify(existing)
 
     if not OPENAI_API_KEY:
@@ -115,9 +118,10 @@ def summarize():
         if parsed.get("practice_first") and parsed["practice_first"].get("slug"):
             parsed["practice_first"]["slug"] = verify_slug(parsed["practice_first"]["slug"])
 
-        # Store summary in database(MONGO DB)
+        # Store summary in database(MongoDB)
         if history_collection is not None:
             history_collection.insert_one({
+                "uid": uid,
                 "problem_slug": problem_slug,
                 "summary": parsed["summary"],
                 "data_structure": parsed["data_structure"],
@@ -133,6 +137,44 @@ def summarize():
         return jsonify({"error": "Request to OpenAI timed out. Please try again."}), 504
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+# ─── Get History: Returns last 20 summaries for a user ─────────────────────
+@app.route("/history", methods=["GET"])
+def get_history():
+    uid = request.args.get("uid")
+    if not uid:
+        return jsonify({"error": "Missing uid"}), 400
+    if history_collection is None:
+        return jsonify({"error": "Database not configured"}), 500
+        
+    results = list(history_collection.find(
+        {"uid": uid},
+        {"_id": 0}
+    ).sort("timestamp", -1).limit(20)) 
+
+    # Convert datetime objects to strings for JSON serialization to avoid TypeError
+    for r in results:
+        r["timestamp"] = r["timestamp"].isoformat() if "timestamp" in r else None
+    
+    return jsonify(results)
+
+# ─── Delete History: Remove one summary by slug, or all for a user ─────────
+@app.route("/history", methods=["DELETE"])
+def delete_history():
+    uid = request.args.get("uid")
+    slug = request.args.get("slug")
+    if not uid:
+        return jsonify({"error": "Missing uid"}), 400
+    if history_collection is None:
+        return jsonify({"error": "Database not configured"}), 500
+
+    if slug:
+        history_collection.delete_one({"uid": uid, "slug": slug})
+    else:
+        history_collection.delete_many({"uid": uid})
+
+    return jsonify({"status": "ok"})
 
 
 if __name__ == "__main__":

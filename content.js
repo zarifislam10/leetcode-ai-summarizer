@@ -1,6 +1,16 @@
 // ─── Config ────────────────────────────────────────────────────────────────
 const BACKEND_URL = 'https://leetstar-hgdxhjf9cvd9dze7.eastus2-01.azurewebsites.net/summarize';
 
+// --- Generate or retrieve unique user ID ────────────────────────────────────
+async function getUID() {
+  const stored = await chrome.storage.local.get('leetstar_uid');
+  if (stored.leetstar_uid) return stored.leetstar_uid;
+
+  const uid = 'user_' + crypto.randomUUID();
+  await chrome.storage.local.set({ leetstar_uid: uid });
+  return uid;
+}
+
 // ─── Icons ───────────────────────────────────────────────────────────────────
 const sunIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun-icon lucide-sun"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>'
 const moonIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon-icon lucide-moon"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></svg>'
@@ -173,12 +183,14 @@ function extractProblemText() {
 
 // ─── Call Flask Backend ──────────────────────────────────────────────────────
 async function fetchSummary(problemText) {
+  const uid = await getUID();
   const response = await fetch(BACKEND_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ 
       problem_text: problemText,
-      problem_slug: getProblemId()
+      problem_slug: getProblemId(),
+      uid: uid
     })
   });
   if (!response.ok) {
