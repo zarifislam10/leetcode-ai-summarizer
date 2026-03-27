@@ -12,11 +12,14 @@ CORS(app, origins="*", supports_credentials=False)
 
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
+history_collection = None
+
 MONGODB_URI = os.environ.get("MONGODB_URI")
 if MONGODB_URI:
     mongo_client = MongoClient(MONGODB_URI)
     db = mongo_client["leetstar"]
     history_collection = db["summaries"]
+
 
 
 SYSTEM_PROMPT = """You are a helpful coding tutor assistant for LeetCode problems. 
@@ -104,6 +107,18 @@ def summarize():
         # Validate and correct practice problem slug before returning to client
         if parsed.get("practice_first") and parsed["practice_first"].get("slug"):
             parsed["practice_first"]["slug"] = verify_slug(parsed["practice_first"]["slug"])
+
+        # Store summary in database(MONGO DB)
+        if history_collection is not None:
+            history_collection.insert_one({
+                "problem_slug": problem_slug,
+                "summary": parsed["summary"],
+                "data_structure": parsed["data_structure"],
+                "data_structure_reason": parsed["data_structure_reason"],
+                "practice_first": parsed["practice_first"],
+                "timestamp": datetime.now(timezone.utc)
+            })
+
 
         return jsonify(parsed)
 
