@@ -3,12 +3,21 @@ from flask_cors import CORS
 import os
 import requests
 from dotenv import load_dotenv
+from pymongo import MongoClient
+from datetime import datetime, timezone
 load_dotenv()
 
 app = Flask(__name__)
 CORS(app, origins="*", supports_credentials=False)
 
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+
+MONGODB_URI = os.environ.get("MONGODB_URI")
+if MONGODB_URI:
+    mongo_client = MongoClient(MONGODB_URI)
+    db = mongo_client["leetstar"]
+    history_collection = db["summaries"]
+
 
 SYSTEM_PROMPT = """You are a helpful coding tutor assistant for LeetCode problems. 
 You respond ONLY in valid JSON with no markdown or extra text."""
