@@ -71,6 +71,13 @@ def summarize():
     problem_text = data["problem_text"][:3000]  # Limit to avoid token overflow
     problem_slug = data.get("problem_slug", "")
 
+    # Check MongoDB cache first to avoid redundant API calls
+    if history_collection is not None:
+        existing = history_collection.find_one({"problem_slug": problem_slug})
+        if existing:
+            existing.pop("_id", None) # remove MongoDB _id so it doesn’t break response
+            return jsonify(existing)
+
     if not OPENAI_API_KEY:
         return jsonify({"error": "OpenAI API key not configured on server"}), 500
 
