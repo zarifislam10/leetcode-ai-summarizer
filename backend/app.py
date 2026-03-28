@@ -21,7 +21,6 @@ if MONGODB_URI:
     history_collection = db["summaries"]
 
 
-
 SYSTEM_PROMPT = """You are a helpful coding tutor assistant for LeetCode problems. 
 You respond ONLY in valid JSON with no markdown or extra text."""
 
@@ -79,6 +78,17 @@ def summarize():
             existing.pop("_id", None)  # removes _id (MongoDB ObjectId can't be JSON'd)
             if "timestamp" in existing:
                 existing["timestamp"] = existing["timestamp"].isoformat()  # converts datetime to string
+            # Save to this user's history even if cached
+            if uid != existing.get("uid"):
+                history_collection.insert_one({
+                    "uid": uid,
+                    "problem_slug": problem_slug,
+                    "summary": existing.get("summary"),
+                    "data_structure": existing.get("data_structure"),
+                    "data_structure_reason": existing.get("data_structure_reason"),
+                    "practice_first": existing.get("practice_first"),
+                    "timestamp": datetime.now(timezone.utc)
+                })
             return jsonify(existing)
 
     if not OPENAI_API_KEY:
