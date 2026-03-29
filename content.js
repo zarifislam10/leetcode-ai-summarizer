@@ -22,6 +22,7 @@ const dumbbellIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height=
 const openEye = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye-icon lucide-eye"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg>'
 const closedEye = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye-closed-icon lucide-eye-closed"><path d="m15 18-.722-3.25"/><path d="M2 8a10.645 10.645 0 0 0 20 0"/><path d="m20 15-1.726-2.05"/><path d="m4 15 1.726-2.05"/><path d="m9 18 .722-3.25"/></svg>'
 const clockIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>'
+const backArrow = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>'
 
 // ─── Check cache first, fetch from backend if not cached ─────────────────
 function getProblemId() {
@@ -103,7 +104,10 @@ function createSummaryPopup() {
       <div id="lc-error" style="display:none" class="lc-error-box"></div>
       <div id="lc-history" style="display:none">
         <div id="lc-history-header">
-          <span id="lc-history-title">History</span>
+          <div id="lc-history-back-row">
+            <button class="lc-settings-btn" id="lc-history-back" title="Back">${backArrow}</button>
+            <span id="lc-history-title">History</span>
+          </div>
           <button class="lc-copy-btn" id="lc-clear-history">Clear All</button>
         </div>
         <div id="lc-history-list"></div>
@@ -225,7 +229,20 @@ function createSummaryPopup() {
       }
     } else {
       history.style.display = 'none';
+      const results = document.getElementById('lc-results');
+      if (results.innerHTML.trim() !== '') {
+        results.style.display = 'flex';
+      }
     }
+  });
+
+  // History back button
+  popup.querySelector('#lc-history-back').addEventListener('click', () => {
+    document.getElementById('lc-history').style.display = 'none';
+    const results = document.getElementById('lc-results');
+    if (results.innerHTML.trim() !== '') {
+      results.style.display = 'flex';
+    } 
   });
 
   // Clear all history

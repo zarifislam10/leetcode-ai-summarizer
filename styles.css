@@ -313,6 +313,12 @@
   gap: 6px;
 }
 
+#lc-history-back-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .lc-history-item {
   cursor: pointer;
 }
