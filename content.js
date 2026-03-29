@@ -105,7 +105,7 @@ function createSummaryPopup() {
       <div id="lc-history" style="display:none">
         <div id="lc-history-header">
           <div id="lc-history-back-row">
-            <button class="lc-settings-btn" id="lc-history-back" title="Back">${backArrow}</button>
+            <button class="lc-close" id="lc-history-back" title="Back">${backArrow}</button>
             <span id="lc-history-title">History</span>
           </div>
           <button class="lc-copy-btn" id="lc-clear-history">Clear All</button>
@@ -334,6 +334,7 @@ async function handleSummarizeClick() {
   document.getElementById('lc-loading').style.display = 'flex';
   document.getElementById('lc-results').style.display = 'none';
   document.getElementById('lc-error').style.display = 'none';
+  document.getElementById('lc-history').style.display = 'none';
 
   // Reset cards
   document.querySelectorAll('.lc-card').forEach(c => {

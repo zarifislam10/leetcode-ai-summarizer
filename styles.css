@@ -319,6 +319,10 @@
   gap: 6px;
 }
 
+#lc-clear-history {
+  margin-top: 0;
+}
+
 .lc-history-item {
   cursor: pointer;
 }
@@ -463,6 +467,7 @@
   justify-content: center;
   transition: all 0.15s;
 }
+
 .lc-settings-btn:hover {
   color: #fff;
   background: rgba(255,255,255,0.08);
