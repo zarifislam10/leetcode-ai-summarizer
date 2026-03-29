@@ -292,6 +292,65 @@
   line-height: 1.5;
 }
 
+/* ── History View ────────────────────────────────────────────────────────── */
+#lc-history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 13px 6px;
+}
+
+#lc-history-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffd700;
+}
+
+#lc-history-list {
+  padding: 0 10px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.lc-history-item {
+  cursor: pointer;
+}
+
+.lc-history-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.lc-history-item-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #d0d0d8;
+  text-transform: capitalize;
+}
+
+.lc-history-item-date {
+  font-size: 11px;
+  color: #555;
+}
+
+.lc-history-item-ds {
+  font-size: 11px;
+  color: #888;
+  margin-top: 4px;
+}
+
+.lc-history-empty {
+  color: #888;
+  font-size: 13px;
+  padding: 8px;
+}
+
+.lc-history-error {
+  color: #f87171;
+}
+
 /* ── Light Mode Overrides ────────────────────────────────────────────────── */
 #lc-popup.lc-light .lc-popup-inner {
   background: #ffffff;
@@ -379,6 +438,11 @@
   border-color: rgba(0,0,0,0.15);
   background: rgba(0,0,0,0.04);
 }
+
+#lc-popup.lc-light #lc-history-title { color: #7a5c0a; }
+#lc-popup.lc-light .lc-history-item-name { color: #1a1a1a; }
+#lc-popup.lc-light .lc-history-item-date { color: #999; }
+#lc-popup.lc-light .lc-history-item-ds { color: #666; }
 
 /* ── Settings Button ─────────────────────────────────────────────────────── */
 .lc-settings-btn {

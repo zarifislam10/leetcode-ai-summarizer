@@ -180,7 +180,7 @@ def delete_history():
         return jsonify({"error": "Database not configured"}), 500
 
     if slug:
-        history_collection.delete_one({"uid": uid, "slug": slug})
+        history_collection.delete_one({"uid": uid, "problem_slug": slug})
     else:
         history_collection.delete_many({"uid": uid})
 

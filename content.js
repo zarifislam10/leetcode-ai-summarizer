@@ -21,6 +21,7 @@ const clipboardIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height
 const dumbbellIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.4 14.4 9.6 9.6"/><path d="M18.657 21.485a2 2 0 1 1-2.829-2.828l-1.767 1.768a2 2 0 1 1-2.829-2.829l6.364-6.364a2 2 0 1 1 2.829 2.829l-1.768 1.767a2 2 0 1 1 2.828 2.829z"/><path d="m21.5 21.5-1.4-1.4"/><path d="M3.9 3.9 2.5 2.5"/><path d="M6.404 12.768a2 2 0 1 1-2.829-2.829l1.768-1.767a2 2 0 1 1-2.828-2.829l2.828-2.828a2 2 0 1 1 2.829 2.828l1.767-1.768a2 2 0 1 1 2.829 2.829z"/></svg>'
 const openEye = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye-icon lucide-eye"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg>'
 const closedEye = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye-closed-icon lucide-eye-closed"><path d="m15 18-.722-3.25"/><path d="M2 8a10.645 10.645 0 0 0 20 0"/><path d="m20 15-1.726-2.05"/><path d="m4 15 1.726-2.05"/><path d="m9 18 .722-3.25"/></svg>'
+const clockIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>'
 
 // ─── Check cache first, fetch from backend if not cached ─────────────────
 function getProblemId() {
@@ -49,6 +50,7 @@ function createSummaryPopup() {
         <span class="lc-popup-logo">LEETST<span class="logo-star">★</span>R</span>
         <div style="display:flex;gap:6px;align-items:center">
           <button class="lc-settings-btn" id="lc-settings-btn" title="Settings">${settingsIcon}</button>
+          <button class="lc-settings-btn" id="lc-history-btn" title="History">${clockIcon}</button>
           <button class="lc-theme-toggle" id="lc-theme-toggle">${sunIcon}</button>
           <button class="lc-close">✕</button>
         </div>
@@ -99,6 +101,13 @@ function createSummaryPopup() {
       </div>
 
       <div id="lc-error" style="display:none" class="lc-error-box"></div>
+      <div id="lc-history" style="display:none">
+        <div id="lc-history-header">
+          <span id="lc-history-title">History</span>
+          <button class="lc-copy-btn" id="lc-clear-history">Clear All</button>
+        </div>
+        <div id="lc-history-list"></div>
+      </div>
     </div>
   `;
   document.body.appendChild(popup);
@@ -163,6 +172,67 @@ function createSummaryPopup() {
         }, 2000);
       });
     });
+  });
+
+  // History toggle
+  popup.querySelector('#lc-history-btn').addEventListener('click', async () => {
+    const history = document.getElementById('lc-history');
+    const results = document.getElementById('lc-results');
+    const loading = document.getElementById('lc-loading');
+    const settings = document.getElementById('lc-settings');
+
+    if (history.style.display === 'none') {
+      results.style.display = 'none';
+      loading.style.display = 'none';
+      settings.classList.remove('lc-settings-open');
+      history.style.display = 'block';
+
+      const uid = await getUID();
+      const historyList = document.getElementById('lc-history-list');
+      historyList.innerHTML = '<div class="lc-history-empty">Loading...</div>';
+
+      try {
+        const res = await fetch(BACKEND_URL.replace('/summarize', '/history') + '?uid=' + uid);
+        const items = await res.json();
+
+        if (items.length === 0) {
+          historyList.innerHTML = '<div class="lc-history-empty">No history yet</div>';
+          return;
+        }
+        // Dynamically render history items from MongoDB response
+        historyList.innerHTML = items.map(item => `
+          <div class="lc-card lc-history-item" data-slug="${item.problem_slug}">
+            <div class="lc-history-item-header">
+              <span class="lc-history-item-name">${item.problem_slug.replace(/-/g, ' ')}</span>
+              <span class="lc-history-item-date">${new Date(item.timestamp).toLocaleDateString()}</span>
+            </div>
+            <div class="lc-history-item-ds">${item.data_structure}</div>
+          </div>
+          `).join('');
+
+          historyList.querySelectorAll('.lc-history-item').forEach(el => {
+            el.addEventListener('click', () => {
+              const slug = el.dataset.slug;
+              const item = items.find(i => i.problem_slug === slug);
+              if (item) {
+                history.style.display = 'none';
+                showResults(item);
+              }
+            });
+          })
+      } catch (e) {
+        historyList.innerHTML = '<div class="lc-history-empty lc-history-error">Failed to load history</div>';
+      }
+    } else {
+      history.style.display = 'none';
+    }
+  });
+
+  // Clear all history
+  popup.querySelector('#lc-clear-history').addEventListener('click', async () => {
+    const uid = await getUID();
+    await fetch(BACKEND_URL.replace('/summarize', '/history') + '?uid=' + uid, { method: 'DELETE' });
+    document.getElementById('lc-history-list').innerHTML = '<div class="lc-history-empty">No history yet</div>';
   });
 }
 
