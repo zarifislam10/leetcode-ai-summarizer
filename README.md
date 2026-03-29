@@ -1,21 +1,62 @@
-# LeetStar v2.0
+# LEETST★R
 
-A Chrome extension that summarizes LeetCode problems using GPT, now with a secure Flask backend.
-
----
+A Chrome extension that helps you understand LeetCode problems faster using AI. Click a star, get a plain-English summary, the best data structure to use, and an easier practice problem to build up to it.
 
 ## Features
 
-- **★ Glowy Star Button** — fixed in the top-right corner of any LeetCode problem page
-- **Summary Card** — plain English explanation of what the problem is asking
-- **Data Structure Card** — suggests the best algorithm/DS to use with a reason why
-- **Practice First Card** — recommends an easier related LeetCode problem to build up to it
+- **One-Click Analysis**: Click the ★ star button on any LeetCode problem page for an instant AI-powered breakdown
+- **Plain-English Summaries**: Understand what the problem is actually asking without decoding the description
+- **Data Structure Recommendations**: Get the best algorithm/DS to use with a clear reason why
+- **Practice First**: Suggests an easier foundational problem to solve before tackling the current one
+- **Summary History**: View your past 20 analyzed problems, stored in MongoDB and synced via unique browser ID
+- **Smart Caching**: Client-side (7-day) and server-side caching to minimize API calls and speed up responses
+- **Dark/Light Mode**: Toggle between themes to match your LeetCode setup
+- **Customizable View**: Hide or show the Data Structure and Practice First sections
+- **Copy to Clipboard**: One-click copy on any summary
 
----
+## Tech Stack
 
-## Setup
+| Layer | Technology |
+|-------|-----------|
+| Extension | JavaScript, Chrome Manifest V3, Chrome Storage API |
+| Backend | Python, Flask, Gunicorn |
+| AI | OpenAI GPT-4o-mini |
+| Database | MongoDB Atlas (free tier) |
+| Hosting | Azure App Service (B1 Basic) |
+| CI/CD | GitHub Actions |
 
-### 1. Backend (Flask)
+## Architecture
+
+```
+Chrome Extension (content.js)
+        │
+        ▼
+Azure App Service (Flask API)
+        │
+        ├──► OpenAI API (GPT-4o-mini)
+        │
+        └──► MongoDB Atlas (summaries + history)
+```
+
+## Quick Start
+
+### Installation (Users)
+
+1. Download the extension from the [Chrome Web Store](#) *(coming soon)*
+2. Navigate to any `leetcode.com/problems/...` page
+3. Click the ★ star button in the top-right corner
+4. Get your summary instantly
+
+### Local Development
+
+#### 1. Clone the repo
+
+```bash
+git clone https://github.com/zarifislam10/leetcode-ai-summarizer.git
+cd leetcode-ai-summarizer
+```
+
+#### 2. Backend Setup
 
 ```bash
 cd backend
@@ -24,14 +65,11 @@ source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-Set your OpenAI API key as an environment variable (never hardcode it):
+Create a `.env` file in `backend/`:
 
-```bash
-# Mac/Linux
-export OPENAI_API_KEY=sk-...
-
-# Windows PowerShell
-$env:OPENAI_API_KEY="sk-..."
+```
+OPENAI_API_KEY=sk-your-key-here
+MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/leetstar
 ```
 
 Run the server:
@@ -42,56 +80,90 @@ python app.py
 
 The server runs on `http://localhost:5000`.
 
----
-
-### 2. Chrome Extension
+#### 3. Load the Extension
 
 1. Open Chrome and go to `chrome://extensions`
 2. Enable **Developer Mode** (top right toggle)
-3. Click **Load unpacked** and select the `/extension` folder
-4. Navigate to any `leetcode.com/problems/...` page
-5. Click the ★ star button in the top-right corner
+3. Click **Load unpacked** and select the root project folder
+4. Navigate to any LeetCode problem page
+5. Click the ★ star button
 
-> ⚠️ The Flask server must be running locally for the extension to work. When you deploy the backend, update `BACKEND_URL` in `content.js`.
-
----
-
-## Deploying the Backend
-
-You can deploy the Flask app to **Railway**, **Render**, or **Fly.io** for free:
-
-### Railway (recommended)
-1. Push `backend/` to a GitHub repo
-2. Create a new project on [railway.app](https://railway.app)
-3. Add `OPENAI_API_KEY` as an environment variable in Railway's dashboard
-4. Railway auto-detects Flask and deploys it
-
-Once deployed, update `content.js`:
-```js
-const BACKEND_URL = 'https://your-app.railway.app/summarize';
-```
-
-And update `manifest.json` host_permissions to include your deployed URL.
-
----
+> Note: For local development, update `BACKEND_URL` in `content.js` to `http://localhost:5000/summarize`.
 
 ## Project Structure
 
 ```
-leetstar/
+leetcode-ai-summarizer/
+├── .github/
+│   └── workflows/
+│       └── main_leetstar.yml    # CI/CD pipeline
 ├── backend/
-│   ├── app.py              # Flask API
-│   └── requirements.txt
-└── extension/
-    ├── content.js          # Chrome extension logic
-    ├── styles.css          # Star button + popup styles
-    └── manifest.json
+│   ├── app.py                   # Flask API (summarize, history, health)
+│   ├── requirements.txt         # Python dependencies
+│   └── startup.txt              # Azure startup command
+├── content.js                   # Chrome extension logic
+├── styles.css                   # UI styles (dark/light mode)
+├── manifest.json                # Chrome extension manifest (MV3)
+└── README.md
 ```
+
+## API Routes
+
+| Method | Route | Description |
+|--------|-------|-------------|
+| GET | `/health` | Health check |
+| POST | `/summarize` | Analyze a LeetCode problem via GPT-4o-mini |
+| GET | `/history?uid=` | Get last 20 summaries for a user |
+| DELETE | `/history?uid=` | Delete all history for a user |
+| DELETE | `/history?uid=&slug=` | Delete a single history entry |
+
+## Deployment
+
+The backend is deployed on **Azure App Service** with CI/CD via GitHub Actions.
+
+- Every push to `main` triggers an automatic build and deploy
+- Azure's Oryx build engine installs Python dependencies on deployment
+- Environment variables (`OPENAI_API_KEY`, `MONGODB_URI`) are set in Azure App Settings
+
+## Security
+
+- API keys live only in environment variables — never in client code
+- OpenAI API key is server-side only; the extension never sees it
+- Problem text is capped at 3,000 characters before sending to OpenAI
+- Each browser install gets a unique anonymous ID (no personal data collected)
+
+## Roadmap
+
+- [x] GPT-powered problem analysis
+- [x] Azure deployment with CI/CD
+- [x] MongoDB history with cross-device support
+- [x] Client-side caching (7-day expiry)
+- [x] Server-side caching (shared across users)
+- [x] Dark/Light mode
+- [x] Collapsible sections (Data Structure, Practice First)
+- [ ] Chrome Web Store publication
+- [ ] Rate limiting with Flask-Limiter
+- [ ] Redis caching layer
+- [ ] Datadog monitoring
+- [ ] Docker containerization
+- [ ] System design diagram
+
+## Contributing
+
+Contributions are welcome!
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/your-feature`)
+3. Commit your changes (`git commit -m "add your feature"`)
+4. Push to the branch (`git push origin feature/your-feature`)
+5. Open a Pull Request
+
+## Acknowledgments
+
+- Built with [OpenAI GPT-4o-mini](https://platform.openai.com/) for problem analysis
+- [LeetCode API](https://github.com/alfaarghya/alfa-leetcode-api) for practice problem slug verification
+- Deployed on [Microsoft Azure](https://azure.microsoft.com/) with [MongoDB Atlas](https://www.mongodb.com/atlas)
 
 ---
 
-## Security Notes
-
-- API key lives only in the backend environment variable — never in extension code
-- CORS is restricted to `chrome-extension://` origins only
-- Problem text is capped at 3000 characters before sending to OpenAI
+Made with ★ for LeetCoders everywhere
