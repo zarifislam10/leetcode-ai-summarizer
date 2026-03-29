@@ -135,7 +135,16 @@ function createSummaryPopup() {
 
   // Clear cache
   popup.querySelector('#lc-clear-cache').addEventListener('click', async () => {
-    await chrome.storage.local.clear();
+    const problemId = getProblemId();
+    if (problemId) {
+      // Clear local cache for this problem
+      await chrome.storage.local.remove(`lc_cache_${problemId}`);
+
+      // Delete from MongoDB history too
+      const uid = await getUID();
+      await fetch(BACKEND_URL.replace('/summarize', '/history') + '?uid=' + uid + '&slug=' + problemId, { method: 'DELETE' });
+    }
+    
     const btn = popup.querySelector('#lc-clear-cache');
     btn.textContent = '✓ Cache Cleared';
     btn.style.color = '#4ade80';
@@ -208,12 +217,16 @@ function createSummaryPopup() {
           <div class="lc-card lc-history-item" data-slug="${item.problem_slug}">
             <div class="lc-history-item-header">
               <span class="lc-history-item-name">${item.problem_slug.replace(/-/g, ' ')}</span>
-              <span class="lc-history-item-date">${new Date(item.timestamp).toLocaleDateString()}</span>
+              <div class="lc-history-item-actions">
+                <span class="lc-history-item-date">${new Date(item.timestamp).toLocaleDateString()}</span>
+                <button class="lc-history-delete" data-slug="${item.problem_slug}" title="Delete">${trashIcon}</button>
+              </div>
             </div>
             <div class="lc-history-item-ds">${item.data_structure}</div>
           </div>
           `).join('');
 
+          // Click history item to view summary
           historyList.querySelectorAll('.lc-history-item').forEach(el => {
             el.addEventListener('click', () => {
               const slug = el.dataset.slug;
@@ -223,7 +236,21 @@ function createSummaryPopup() {
                 showResults(item);
               }
             });
-          })
+          });
+
+          // Delete individual history item
+          historyList.querySelectorAll('.lc-history-delete').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+              e.stopPropagation();
+              const slug = btn.dataset.slug;
+              const uid = await getUID();
+              await fetch(BACKEND_URL.replace('/summarize', '/history') + '?uid=' + uid + '&slug=' + slug, { method: 'DELETE' });
+              btn.closest('.lc-history-item').remove();
+              if (historyList.children.length === 0) {
+                historyList.innerHTML = '<div class="lc-history-empty">No history yet</div>';
+              } 
+            });
+          });
       } catch (e) {
         historyList.innerHTML = '<div class="lc-history-empty lc-history-error">Failed to load history</div>';
       }

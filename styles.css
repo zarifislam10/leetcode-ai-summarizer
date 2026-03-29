@@ -319,6 +319,14 @@
   gap: 6px;
 }
 
+#lc-history-back {
+  color: #ffd700;
+}
+#lc-history-back:hover {
+  color: #fff8b0;
+  background: rgba(255, 215, 0, 0.12);
+}
+
 #lc-clear-history {
   margin-top: 0;
 }
@@ -349,6 +357,26 @@
   font-size: 11px;
   color: #888;
   margin-top: 4px;
+}
+
+.lc-history-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lc-history-delete {
+  background: none;
+  border: none;
+  color: #555;
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 4px;
+  transition: color 0.15s;
+}
+
+.lc-history-delete:hover {
+  color: #f87171;
 }
 
 .lc-history-empty {
@@ -450,6 +478,13 @@
 }
 
 #lc-popup.lc-light #lc-history-title { color: #7a5c0a; }
+#lc-popup.lc-light #lc-history-back {
+  color: #7a5c0a;
+}
+#lc-popup.lc-light #lc-history-back:hover {
+  color: #5c4506;
+  background: rgba(122, 92, 10, 0.1);
+}
 #lc-popup.lc-light .lc-history-item-name { color: #1a1a1a; }
 #lc-popup.lc-light .lc-history-item-date { color: #999; }
 #lc-popup.lc-light .lc-history-item-ds { color: #666; }
