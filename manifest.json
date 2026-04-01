@@ -3,7 +3,11 @@
   "name": "LeetStar",
   "version": "2.0",
   "description": "Summarizes LeetCode problems, suggests data structures, and recommends easier practice problems.",
-  "permissions": ["activeTab", "clipboardWrite", "storage"],
+  "permissions": [
+    "activeTab", 
+    "clipboardWrite", 
+    "storage"
+  ],
   "host_permissions": [
     "https://leetcode.com/*",
     "http://localhost:5000/*",
@@ -13,5 +17,18 @@
     "matches": ["https://leetcode.com/problems/*"],
     "js": ["content.js"],
     "css": ["styles.css"]
-  }]
+  }
+],
+  "icons": {
+    "16": "images/leetstar_icon-16.png",
+    "48": "images/leetstar_icon-48.png",
+    "128": "images/leetstar_icon-128.png"
+  },
+  "action": {
+    "default_icon": {
+      "16": "images/leetstar_icon-16.png",
+      "48": "images/leetstar_icon-48.png",
+      "128": "images/leetstar_icon-128.png"
+    }
+  }
 }
