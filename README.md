@@ -44,7 +44,7 @@
 ## Architecture
 
 <p align="center">
-  <img src="images/system-architecture.png" width="100%" alt="LeetStar System Architecture">
+  <img src="images/LeetStar-System_Architecture.png" width="100%" alt="LeetStar System Architecture">
 </p>
 
 ## Quick Start
