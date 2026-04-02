@@ -244,8 +244,21 @@ function createSummaryPopup() {
               e.stopPropagation();
               const slug = btn.dataset.slug;
               const uid = await getUID();
+
+              // Delete from Server (MongoDB)
               await fetch(BACKEND_URL.replace('/summarize', '/history') + '?uid=' + uid + '&slug=' + slug, { method: 'DELETE' });
+              
+              // Delete from Browser (Chrome Storage)
+              await chrome.storage.local.remove(`lc_cache_${slug}`);
+
+              // Remove from UI
               btn.closest('.lc-history-item').remove();
+
+              // If the user is currently LOOKING at this summary, hide it
+              if (getProblemId() === slug) {
+                document.getElementById('lc-results').style.display = 'none';
+              }
+
               if (historyList.children.length === 0) {
                 historyList.innerHTML = '<div class="lc-history-empty">No history yet</div>';
               } 
@@ -275,8 +288,19 @@ function createSummaryPopup() {
   // Clear all history
   popup.querySelector('#lc-clear-history').addEventListener('click', async () => {
     const uid = await getUID();
+
+    // Wipe the Server (MongoDB)
     await fetch(BACKEND_URL.replace('/summarize', '/history') + '?uid=' + uid, { method: 'DELETE' });
+    
+    // Wipe the Browser Cache (Chrome Storage)
+    const allStorage = await chrome.storage.local.get(null);
+    const cacheKeys = Object.keys(allStorage).filter(key => key.startsWith('lc-cache_'));
+    await chrome.storage.local.remove(cacheKeys);
+
+    // Reset the UI so it doesn't show "Stale" data
     document.getElementById('lc-history-list').innerHTML = '<div class="lc-history-empty">No history yet</div>';
+    document.getElementById('lc-results').style.display = 'none';
+    document.getElementById('lc-results').innerHTML = '';
   });
 }
 
