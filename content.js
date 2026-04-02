@@ -30,6 +30,32 @@ function getProblemId() {
   return match ? match[1] : null;
 }
 
+/** Hide results panel and clear text nodes only (keeps elements for later use). */
+function resetSummaryPanelUI() {
+  const results = document.getElementById('lc-results');
+  if (results) results.style.display = 'none';
+
+  const summary = document.getElementById('lc-summary-text');
+  if (summary) summary.textContent = '';
+
+  const badge = document.getElementById('lc-ds-badge');
+  if (badge) badge.textContent = '';
+
+  const dsReason = document.getElementById('lc-ds-reason');
+  if (dsReason) dsReason.textContent = '';
+
+  const prLink = document.getElementById('lc-practice-link');
+  if (prLink) {
+    prLink.textContent = '';
+    prLink.href = '#';
+  }
+  const prReason = document.getElementById('lc-practice-reason');
+  if (prReason) prReason.textContent = '';
+
+  const cardPractice = document.getElementById('lc-card-practice');
+  if (cardPractice) cardPractice.style.display = '';
+}
+
 // ─── Button ─────────────────────────────────────────────────────────────────
 function createSummarizeButton() {
   const button = document.createElement('button');
@@ -137,14 +163,16 @@ function createSummaryPopup() {
   popup.querySelector('#lc-clear-cache').addEventListener('click', async () => {
     const problemId = getProblemId();
     if (problemId) {
-      // Clear local cache for this problem
+      // Clear local cache for this problem (must match handleSummarizeClick key)
       await chrome.storage.local.remove(`lc_cache_${problemId}`);
 
       // Delete from MongoDB history too
       const uid = await getUID();
       await fetch(BACKEND_URL.replace('/summarize', '/history') + '?uid=' + uid + '&slug=' + problemId, { method: 'DELETE' });
     }
-    
+
+    resetSummaryPanelUI();
+
     const btn = popup.querySelector('#lc-clear-cache');
     btn.textContent = '✓ Cache Cleared';
     btn.style.color = '#4ade80';
@@ -254,9 +282,9 @@ function createSummaryPopup() {
               // Remove from UI
               btn.closest('.lc-history-item').remove();
 
-              // If the user is currently LOOKING at this summary, hide it
+              // If the user is currently on this problem, reset panel so next summarize is fresh
               if (getProblemId() === slug) {
-                document.getElementById('lc-results').style.display = 'none';
+                resetSummaryPanelUI();
               }
 
               if (historyList.children.length === 0) {
@@ -292,18 +320,14 @@ function createSummaryPopup() {
     // Wipe the Server (MongoDB)
     await fetch(BACKEND_URL.replace('/summarize', '/history') + '?uid=' + uid, { method: 'DELETE' });
     
-    // Wipe the Browser Cache (Chrome Storage)
+    // Wipe local summary cache (same prefix as handleSummarizeClick: lc_cache_)
     const allStorage = await chrome.storage.local.get(null);
-    const cacheKeys = Object.keys(allStorage).filter(key => key.startsWith('lc-cache_'));
+    const cacheKeys = Object.keys(allStorage).filter(key => key.startsWith('lc_cache_'));
     await chrome.storage.local.remove(cacheKeys);
 
-    // Reset the UI so it doesn't show "Stale" data
+    // Reset the UI so it doesn't show stale data
     document.getElementById('lc-history-list').innerHTML = '<div class="lc-history-empty">No history yet</div>';
-    document.getElementById('lc-results').style.display = 'none';
-
-    document.getElementById('lc-summary-text').textContent = '';
-    document.getElementById('lc-ds-badge').textContent = '';
-    document.getElementById('lc-ds-reason').textContent = '';
+    resetSummaryPanelUI();
   });
 }
 
