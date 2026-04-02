@@ -157,7 +157,7 @@ The backend is deployed on **Azure App Service** with CI/CD via GitHub Actions.
 - [x] Dark/Light mode
 - [x] Collapsible sections (Data Structure, Practice First)
 - [ ] Chrome Web Store publication
-- [ ] Rate limiting with Flask-Limiter
+- [x] Rate limiting with Flask-Limiter
 - [ ] Redis caching layer
 - [ ] Datadog monitoring
 - [ ] Docker containerization
