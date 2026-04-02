@@ -17,7 +17,6 @@
   </p>
 </div>
 
----
 
 ## Features
 
