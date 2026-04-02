@@ -183,6 +183,7 @@ Contributions are welcome!
 LEETST★R is the full-stack evolution of my original 2025 "LeetCode AI Summarizer" project. 
 
 **v1.0 (March 2025)** was a client-side proof-of-concept focused on real-time extraction. 
+
 **v2.0 (Current)** re-architected the system with a Flask backend, MongoDB persistence,
 Azure CI/CD deployment, and a polished dark/light UI.
 
