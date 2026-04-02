@@ -299,12 +299,11 @@ function createSummaryPopup() {
 
     // Reset the UI so it doesn't show "Stale" data
     document.getElementById('lc-history-list').innerHTML = '<div class="lc-history-empty">No history yet</div>';
-    
-    const resultsDiv = document.getElementById('lc-results');
-    resultsDiv.style.display = 'none';
-    
+    document.getElementById('lc-results').style.display = 'none';
+
     document.getElementById('lc-summary-text').textContent = '';
-    document.getElementById('lc-ds-badge').innerHTML = '';
+    document.getElementById('lc-ds-badge').textContent = '';
+    document.getElementById('lc-ds-reason').textContent = '';
   });
 }
 
