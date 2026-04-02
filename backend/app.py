@@ -1,12 +1,14 @@
+import os
+import json
+import requests
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-import os
-import requests
 from dotenv import load_dotenv
 from pymongo import MongoClient
 from datetime import datetime, timezone
+
 load_dotenv()
 
 app = Flask(__name__)
@@ -19,6 +21,7 @@ ALLOWED_ORIGINS = [
 CORS(app, origins=ALLOWED_ORIGINS)
 
 def get_uid_from_request():
+    # Resolves identity from JSON body, URL parameters, or Client IP (fallback)
     data = request.get_json(silent=True)
     if data and data.get("uid"):
         return data["uid"]
@@ -84,7 +87,8 @@ def health():
     return jsonify({"status": "ok"})
 
 @app.route("/summarize", methods=["POST"])
-@limiter.limit("10 per minute; 100 per day")  # per-minute + daily caps for expensive API
+@limiter.limit("10 per minute")   # Strategy 1: Prevent burst abuse
+@limiter.limit("100 per day")     # Strategy 2: Protect monthly API budget
 def summarize():
     data = request.get_json()
     if not data or "problem_text" not in data:
@@ -92,27 +96,30 @@ def summarize():
 
     problem_text = data["problem_text"][:3000]  # Limit to avoid token overflow
     problem_slug = data.get("problem_slug", "")
-    uid = data.get("uid", "anonymous")
+    uid = get_uid_from_request()
 
     # Check MongoDB cache first to avoid redundant API calls
     if history_collection is not None:
-        existing = history_collection.find_one({"problem_slug": problem_slug})
-        if existing:
-            existing.pop("_id", None)  # removes _id (MongoDB ObjectId can't be JSON'd)
-            if "timestamp" in existing:
-                existing["timestamp"] = existing["timestamp"].isoformat()  # converts datetime to string
-            # Save to this user's history even if cached
-            if uid != existing.get("uid"):
-                history_collection.insert_one({
-                    "uid": uid,
-                    "problem_slug": problem_slug,
-                    "summary": existing.get("summary"),
-                    "data_structure": existing.get("data_structure"),
-                    "data_structure_reason": existing.get("data_structure_reason"),
-                    "practice_first": existing.get("practice_first"),
-                    "timestamp": datetime.now(timezone.utc)
-                })
-            return jsonify(existing)
+        try:
+            existing = history_collection.find_one({"problem_slug": problem_slug})
+            if existing:
+                existing.pop("_id", None)  # removes _id (MongoDB ObjectId can't be JSON'd)
+                if "timestamp" in existing:
+                    existing["timestamp"] = existing["timestamp"].isoformat()  # converts datetime to string
+                # Save to this user's history even if cached
+                if uid != existing.get("uid"):
+                    history_collection.insert_one({
+                        "uid": uid,
+                        "problem_slug": problem_slug,
+                        "summary": existing.get("summary"),
+                        "data_structure": existing.get("data_structure"),
+                        "data_structure_reason": existing.get("data_structure_reason"),
+                        "practice_first": existing.get("practice_first"),
+                        "timestamp": datetime.now(timezone.utc)
+                    })
+                return jsonify(existing)
+        except Exception as e:
+            print(f"Database cache error: {e}")
 
     if not OPENAI_API_KEY:
         return jsonify({"error": "OpenAI API key not configured on server"}), 500
@@ -144,7 +151,6 @@ def summarize():
         result = response.json()
         content = result["choices"][0]["message"]["content"]
 
-        import json
         parsed = json.loads(content)
 
         # Validate and correct practice problem slug before returning to client
@@ -175,7 +181,7 @@ def summarize():
 # ─── Get History: Returns last 20 summaries for a user ─────────────────────
 @app.route("/history", methods=["GET"])
 def get_history():
-    uid = request.args.get("uid")
+    uid = get_uid_from_request()
     if not uid:
         return jsonify({"error": "Missing uid"}), 400
     if history_collection is None:
@@ -195,7 +201,7 @@ def get_history():
 # ─── Delete History: Remove one summary by slug, or all for a user ─────────
 @app.route("/history", methods=["DELETE"])
 def delete_history():
-    uid = request.args.get("uid")
+    uid = get_uid_from_request()
     slug = request.args.get("slug")
     if not uid:
         return jsonify({"error": "Missing uid"}), 400
