@@ -1,6 +1,22 @@
-# LEETST★R
+<div align="center">
+  <img src="images/leetstar-icon.png" width="160" height="160" alt="LeetStar Logo">
+  <h1>LEETST★R</h1>
+  <p>
+    <i>The AI-powered companion that decodes LeetCode complexity in real-time.</i>
+  </p>
+  <p>
+    <a href="https://github.com/zarifislam10/leetcode-ai-summarizer/releases"><b>Install Extension</b></a> •
+    <a href="https://github.com/zarifislam10/leetcode-ai-summarizer/issues/new?labels=bug&template=bug_report.md"><b>Report Issue</b></a> •
+    <a href="https://github.com/zarifislam10/leetcode-ai-summarizer/issues/new?labels=enhancement&template=feature_request.md"><b>Suggest Feature</b></a>
+  </p>
+  <p>
+    <img src="https://img.shields.io/badge/Status-Beta-yellow?style=for-the-badge" alt="Status">
+    <img src="https://img.shields.io/badge/Backend-Flask-blue?style=for-the-badge&logo=flask" alt="Backend">
+    <img src="https://img.shields.io/badge/Cloud-Azure-0089D6?style=for-the-badge&logo=microsoftazure" alt="Azure">
+    <img src="https://img.shields.io/badge/AI-OpenAI-412991?style=for-the-badge&logo=openai" alt="OpenAI">
+  </p>
+</div>
 
-A Chrome extension that helps you understand LeetCode problems faster using AI. Click a star, get a plain-English summary, the best data structure to use, and an easier practice problem to build up to it.
 
 ## Features
 
@@ -27,16 +43,9 @@ A Chrome extension that helps you understand LeetCode problems faster using AI. 
 
 ## Architecture
 
-```
-Chrome Extension (content.js)
-        │
-        ▼
-Azure App Service (Flask API)
-        │
-        ├──► OpenAI API (GPT-4o-mini)
-        │
-        └──► MongoDB Atlas (summaries + history)
-```
+<p align="center">
+  <img src="images/LeetStar-System_Architecture.png" width="100%" alt="LeetStar System Architecture">
+</p>
 
 ## Quick Start
 
