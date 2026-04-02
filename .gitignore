@@ -11,4 +11,5 @@
 **/.DS_Store
 
 # IDE Settings
-.vscode/
+.vscode/*.bru
+Leetcode AI Summarizer/
