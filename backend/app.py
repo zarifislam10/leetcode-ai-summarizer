@@ -1,5 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 import os
 import requests
 from dotenv import load_dotenv
@@ -8,7 +10,27 @@ from datetime import datetime, timezone
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app, origins="*", supports_credentials=False)
+
+ALLOWED_ORIGINS = [
+    "chrome-extension://kmmfimalgpemdflbkefkeefaphdmhpoi",
+    "https://leetcode.com",
+    "http://localhost:5000",
+]
+CORS(app, origins=ALLOWED_ORIGINS)
+
+def get_uid_from_request():
+    data = request.get_json(silent=True)
+    if data and data.get("uid"):
+        return data["uid"]
+    return request.args.get("uid", get_remote_address())
+
+# Rate Limiting
+limiter = Limiter(
+    key_func=get_uid_from_request,
+    app=app,
+    default_limits=["60 per minute"],
+    storage_uri="memory://",
+)
 
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
@@ -62,6 +84,7 @@ def health():
     return jsonify({"status": "ok"})
 
 @app.route("/summarize", methods=["POST"])
+@limiter.limit("10 per minute; 100 per day")  # per-minute + daily caps for expensive API
 def summarize():
     data = request.get_json()
     if not data or "problem_text" not in data:

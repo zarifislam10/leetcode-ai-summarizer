@@ -1,4 +1,14 @@
+# Security
 .env
-.venv
-__pycache__
+
+# Environments & Cache
+.venv/
+**/__pycache__/
 *.pyc
+
+# Mac System Files
+.DS_Store
+**/.DS_Store
+
+# IDE Settings
+.vscode/
