@@ -32,14 +32,20 @@
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Extension | JavaScript, Chrome Manifest V3, Chrome Storage API |
-| Backend | Python, Flask, Gunicorn |
-| AI | OpenAI GPT-4o-mini |
-| Database | MongoDB Atlas (free tier) |
-| Hosting | Azure App Service (B1 Basic) |
-| CI/CD | GitHub Actions |
+### Frontend & Extension
+![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+![Chrome](https://img.shields.io/badge/Chrome_Extension-v3-blue?style=for-the-badge&logo=google-chrome&logoColor=white)
+
+### Backend & AI
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white)
+![OpenAI](https://img.shields.io/badge/OpenAI-412991?style=for-the-badge&logo=openai&logoColor=white)
+
+### Database & Infrastructure
+![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
+![Azure](https://img.shields.io/badge/azure-%230072C6.svg?style=for-the-badge&logo=microsoftazure&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
+![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 
 ## Architecture
 
@@ -78,7 +84,7 @@ Create a `.env` file in `backend/`:
 
 ```
 OPENAI_API_KEY=sk-your-key-here
-MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/leetstar
+MONGODB_URI=mongodb+srv://<USERNAME>:<PASSWORD>@cluster.mongodb.net/leetstar
 ```
 
 Run the server:
@@ -155,7 +161,7 @@ The backend is deployed on **Azure App Service** with CI/CD via GitHub Actions.
 - [ ] Redis caching layer
 - [ ] Datadog monitoring
 - [ ] Docker containerization
-- [ ] System design diagram
+- [x] System design diagram
 
 ## Contributing
 
@@ -172,6 +178,12 @@ Contributions are welcome!
 - Built with [OpenAI GPT-4o-mini](https://platform.openai.com/) for problem analysis
 - [LeetCode API](https://github.com/alfaarghya/alfa-leetcode-api) for practice problem slug verification
 - Deployed on [Microsoft Azure](https://azure.microsoft.com/) with [MongoDB Atlas](https://www.mongodb.com/atlas)
+
+### Project Evolution
+LEETST★R is the full-stack evolution of my original 2025 "LeetCode AI Summarizer" project. 
+
+**v1.0 (March 2025)** was a client-side proof-of-concept focused on real-time extraction. 
+**v2.0 (Current)** re-architected the system to include a robust backend, persistent NoSQL storage, and a premium design system.
 
 ---
 
