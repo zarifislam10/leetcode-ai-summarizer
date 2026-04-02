@@ -11,6 +11,7 @@ from datetime import datetime, timezone
 
 load_dotenv()
 
+# ─── App Config ─────────────────────────────────────────────────────────────
 app = Flask(__name__)
 
 ALLOWED_ORIGINS = [
@@ -27,7 +28,7 @@ def get_uid_from_request():
         return data["uid"]
     return request.args.get("uid", get_remote_address())
 
-# Rate Limiting
+# ─── Rate Limiting ──────────────────────────────────────────────────────────
 limiter = Limiter(
     key_func=get_uid_from_request,
     app=app,
@@ -35,6 +36,7 @@ limiter = Limiter(
     storage_uri="memory://",
 )
 
+# ─── Database ───────────────────────────────────────────────────────────────
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
 history_collection = None
@@ -45,7 +47,7 @@ if MONGODB_URI:
     db = mongo_client["leetstar"]
     history_collection = db["summaries"]
 
-
+# ─── Prompts ────────────────────────────────────────────────────────────────
 SYSTEM_PROMPT = """You are a helpful coding tutor assistant for LeetCode problems. 
 You respond ONLY in valid JSON with no markdown or extra text."""
 
@@ -67,7 +69,7 @@ IMPORTANT: The practice_first problem must be completely different from the curr
 Problem:
 {problem_text}"""
 
-
+# ─── Helpers ────────────────────────────────────────────────────────────────
 def verify_slug(slug):
     try:
         response = requests.get(
@@ -81,11 +83,12 @@ def verify_slug(slug):
         pass
     return slug # Fall back to GPT's slug
 
-
+# ─── Routes: Health ─────────────────────────────────────────────────────────
 @app.route("/health", methods=["GET"])
 def health():
     return jsonify({"status": "ok"})
 
+# ─── Routes: Summarize ──────────────────────────────────────────────────────
 @app.route("/summarize", methods=["POST"])
 @limiter.limit("10 per minute")   # Strategy 1: Prevent burst abuse
 @limiter.limit("100 per day")     # Strategy 2: Protect monthly API budget
@@ -178,7 +181,7 @@ def summarize():
         return jsonify({"error": str(e)}), 500
 
 
-# ─── Get History: Returns last 20 summaries for a user ─────────────────────
+# ─── Routes: History ────────────────────────────────────────────────────────
 @app.route("/history", methods=["GET"])
 def get_history():
     uid = get_uid_from_request()
@@ -190,7 +193,7 @@ def get_history():
     results = list(history_collection.find(
         {"uid": uid},
         {"_id": 0}
-    ).sort("timestamp", -1).limit(20)) 
+    ).sort("timestamp", -1).limit(20))  # Returns last 20 summaries for a user
 
     # Convert datetime objects to strings for JSON serialization to avoid TypeError
     for r in results:
@@ -198,7 +201,7 @@ def get_history():
     
     return jsonify(results)
 
-# ─── Delete History: Remove one summary by slug, or all for a user ─────────
+# Remove one summary by slug, or all for a user 
 @app.route("/history", methods=["DELETE"])
 def delete_history():
     uid = get_uid_from_request()
@@ -215,6 +218,6 @@ def delete_history():
 
     return jsonify({"status": "ok"})
 
-
+# ─── Main ────────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
