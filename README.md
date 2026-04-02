@@ -142,7 +142,7 @@ The backend is deployed on **Azure App Service** with CI/CD via GitHub Actions.
 
 ## Security
 
-- API keys live only in environment variables — never in client code
+- API keys live only in environment variables, never in client code
 - OpenAI API key is server-side only; the extension never sees it
 - Problem text is capped at 3,000 characters before sending to OpenAI
 - Each browser install gets a unique anonymous ID (no personal data collected)
@@ -181,9 +181,9 @@ Contributions are welcome!
 
 ## Evolution
 
-> **v1.0** (March 2025) — Client-side proof-of-concept focused on real-time extraction.
->
-> **v2.0** (Current) — Re-architected with a Flask backend, MongoDB persistence, Azure CI/CD deployment, and a polished dark/light UI.
+ **v1.0** (March 2025): Client-side proof-of-concept focused on real-time extraction.
+
+ **v2.0** (Current): Re-architected with a Flask backend, MongoDB persistence, Azure CI/CD deployment, and a polished dark/light UI.
 
 ---
 
