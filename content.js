@@ -30,7 +30,8 @@ function getProblemId() {
   return match ? match[1] : null;
 }
 
-/** Hide results panel and clear text nodes only (keeps elements for later use). */
+// ─── Reset UI ───────────────────────────────────────────────────────────────
+// Hide results panel and clear text nodes only (keeps elements for later use)
 function resetSummaryPanelUI() {
   const results = document.getElementById('lc-results');
   if (results) results.style.display = 'none';
