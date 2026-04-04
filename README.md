@@ -30,6 +30,12 @@
 - **Customizable View**: Hide or show the Data Structure and Practice First sections
 - **Copy to Clipboard**: One-click copy on any summary
 
+## Demo
+
+<p align="center">
+  <img src="images/LeetStar_demo.gif" width="100%" alt="LeetStar Demo">
+</p>
+
 ## Tech Stack
 
 ### Frontend & Extension
